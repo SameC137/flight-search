@@ -115,6 +115,7 @@ function SearchPageContent() {
   );
   const [flights, setFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(false);
+  const [maxFlightPrice, setMaxPrice] = useState(2000);
 
   const  dynamicDefault = !!returnDate ?  false: true
 
@@ -227,13 +228,16 @@ function SearchPageContent() {
           const minPrice = Math.min(...prices);
           const maxPrice = Math.max(...prices);
           setPriceRange([Math.floor(minPrice), Math.ceil(maxPrice)]);
+          setMaxPrice(Math.ceil(maxPrice));
         }
       } else {
         setPriceRange([280, 510]);
+        setMaxPrice(510);
       }
     } catch (error) {
       console.error("Error fetching flights:", error);
       setPriceRange([350, 420]);
+      setMaxPrice(420);
       toast.error("Failed to fetch flights. Please try again.");
       setFlights([]); // Clear flights on error
       // Don't re-throw - we handle errors gracefully with toast
@@ -470,8 +474,8 @@ function SearchPageContent() {
                       setPriceRange([priceRange[0], value[1]])
                     }
                     min={0}
-                    max={2000}
-                    step={10}
+                    max={maxFlightPrice}
+                    step={1}
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
                     <span>{formatCurrency(priceRange[0], currency)}</span>
@@ -556,7 +560,7 @@ function SearchPageContent() {
               >
               <Card className="shadow-lg">
                 <CardHeader>
-                  <CardTitle>Price Trends</CardTitle>
+                  <CardTitle>Price Compare</CardTitle>
                   <CardDescription>
                     Real-time price comparison across airlines
                   </CardDescription>
@@ -590,23 +594,12 @@ function SearchPageContent() {
                 }}
                 cursor={{ fill: "rgba(59, 130, 246, 0.1)" }}
               />
-                        {/* <Tooltip
-                          formatter={(value: number | undefined) =>
-                            value !== undefined
-                              ? formatCurrency(value, currency)
-                              : ""
-                          }
-                          labelStyle={{ color: "black" }}
-                        /> */}
                         <Legend />
                         <BarStack>
                         <Bar
                           dataKey="price"
                           fill="#8884d8" 
                           maxBarSize={50}
-                          // strokeWidth={2}
-                          // dot={{ r: 4 }}
-                          // activeDot={{ r: 6 }}
                         />
                         </BarStack>
                         <Line
