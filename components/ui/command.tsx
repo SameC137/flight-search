@@ -10,6 +10,7 @@ interface CommandInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   placeholder?: string
   value?: string
   onValueChange?: (value: string) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 interface CommandListProps {

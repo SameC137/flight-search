@@ -32,10 +32,10 @@ interface LocationSelectorProps {
 
 export function LocationSelector({ label, value, onChange, placeholder = "Search..." }: LocationSelectorProps) {
   const [open, setOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(value)
   const [locations, setLocations] = useState<Location[]>([])
   const [loading, setLoading] = useState(false)
-  const debounceTimer = useRef<NodeJS.Timeout>()
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     if (searchQuery.length < 2) {
@@ -76,7 +76,7 @@ export function LocationSelector({ label, value, onChange, placeholder = "Search
   const handleSelect = (location: Location) => {
     onChange(location.iataCode)
     setOpen(false)
-    setSearchQuery('')
+    setSearchQuery(location.iataCode)
     setLocations([])
   }
 
@@ -101,10 +101,10 @@ export function LocationSelector({ label, value, onChange, placeholder = "Search
           <div className="relative mt-1">
             <Input
               id={label.toLowerCase()}
-              value={value}
+              value={searchQuery}
               onChange={(e) => {
                 const newValue = e.target.value
-                onChange(newValue)
+                // onChange(newValue)
                 setSearchQuery(e.target.value)
                 if (e.target.value.length >= 2) {
                   setOpen(true)
