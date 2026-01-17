@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { add, format } from "date-fns";
 import {
   Card,
@@ -83,7 +83,7 @@ interface Flight {
   numberOfBookableSeats?: number;
 }
 
-export default function Home() {
+function SearchPageContent() {
   const [origin, setOrigin] = useQueryState(
     "origin",
     parseAsString.withDefault("NYC")
@@ -766,5 +766,22 @@ export default function Home() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading search page...</p>
+          </div>
+        </div>
+      }
+    >
+      <SearchPageContent />
+    </Suspense>
   );
 }

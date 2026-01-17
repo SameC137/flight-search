@@ -96,7 +96,7 @@ export function LocationSelector({ label, value, onChange, placeholder = "Search
   return (
     <div>
       <Label htmlFor={label.toLowerCase()}>{label}</Label>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={setOpen} modal={true}>
         <PopoverTrigger asChild>
           <div className="relative mt-1">
             <Input
